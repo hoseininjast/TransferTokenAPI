@@ -75,7 +75,8 @@ app.post("/transfer", async (request, response) => {
 
         if (amount == 'all'){
             var num = parseFloat(web3.utils.fromWei(Balance) - 0.1).toString();
-            var finalnumber = web3.utils.toHex(num);
+            var wei = web3.utils.toWei(num);
+            var finalnumber = web3.utils.toHex(wei);
         } else if (typeof (parseInt(amount)) == 'number'){
             var num = parseFloat(amount).toString();
             var wei = web3.utils.toWei(num);
