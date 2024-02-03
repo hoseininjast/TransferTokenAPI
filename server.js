@@ -129,6 +129,13 @@ app.post("/transfer", async (request, response) => {
 
 });
 
+
+app.get('/health' , function (req, res){
+    const status = {
+        "Status": "Running"
+    };
+    res.send(status , 200);
+})
 app.listen(3000, () => {
     console.log(`web server listening on port ${3000}`);
 });
