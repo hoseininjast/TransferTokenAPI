@@ -73,7 +73,6 @@ app.post("/transfer", async (request, response) => {
            return result;
         });
 
-
         if (amount == 'all'){
             var num = parseFloat(Balance).toString();
             var finalnumber = web3.utils.toHex(num);
