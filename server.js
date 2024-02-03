@@ -74,7 +74,7 @@ app.post("/transfer", async (request, response) => {
         });
 
         if (amount == 'all'){
-            var num = parseFloat(Balance).toString();
+            var num = parseFloat(Balance - 0.01).toString();
             var finalnumber = web3.utils.toHex(num);
         } else if (typeof (parseInt(amount)) == 'number'){
             var num = parseFloat(amount).toString();
