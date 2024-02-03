@@ -69,18 +69,23 @@ app.post("/transfer", async (request, response) => {
             ]
             , '0x0000000000000000000000000000000000001010', {from: ConnectedAccount})
 
-        let Balance = 0 ;
-        await MaticTokenContract.methods.balanceOf(ConnectedAccount).call().then(function (result) {
-            Balance = result;
+        let Balance = await MaticTokenContract.methods.balanceOf(ConnectedAccount).call().then(function (result) {
+           return result;
         });
 
-        var num = parseFloat(amount).toString();
-        var wei = web3.utils.toWei(num);
-        var finalnumber = web3.utils.toHex(wei)
+
+        if (amount == 'all'){
+            var num = parseFloat(Balance).toString();
+            var finalnumber = web3.utils.toHex(num);
+        } else if (typeof (parseInt(amount)) == 'number'){
+            var num = parseFloat(amount).toString();
+            var wei = web3.utils.toWei(num);
+            var finalnumber = web3.utils.toHex(wei)
+        }
+
         var toAddress = receiver;
-        var ToAddressBalance;
-        await MaticTokenContract.methods.balanceOf(toAddress).call().then(function (result) {
-            ToAddressBalance = result;
+        var ToAddressBalance = await MaticTokenContract.methods.balanceOf(toAddress).call().then(function (result) {
+            return result;
         });
         var gasfee = await web3.eth.estimateGas({
             to: toAddress,
@@ -90,9 +95,6 @@ app.post("/transfer", async (request, response) => {
         var gasprice = await web3.eth.getGasPrice().then(function (result){
            return result;
         });
-
-        console.log(gasfee);
-        console.log(gasprice);
 
         const tx = {
             from: ConnectedAccount,
