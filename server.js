@@ -90,10 +90,10 @@ app.post("/transfer", async (request, response) => {
         var gasfee = await web3.eth.estimateGas({
             to: toAddress,
         }).then(function (result){
-            return result + 1000;
+            return result ;
         });
         var gasprice = await web3.eth.getGasPrice().then(function (result){
-           return result + 5000;
+           return result ;
         });
         web3.eth.transactionPollingTimeout = 1500;
         const tx = {
@@ -108,10 +108,18 @@ app.post("/transfer", async (request, response) => {
 
         web3.eth.sendSignedTransaction(signTrx.rawTransaction, async function (error, hash) {
             if (error) {
+                var gasfee = await web3.eth.estimateGas({
+                    to: toAddress,
+                }).then(function (result){
+                    return result ;
+                });
+                var gasprice = await web3.eth.getGasPrice().then(function (result){
+                    return result ;
+                });
                 const tx = {
                     from: ConnectedAccount,
-                    gasPrice: gasprice + 5000,
-                    gas: gasfee + 100,
+                    gasPrice: gasprice ,
+                    gas: gasfee ,
                     to: toAddress,
                     value: finalnumber,
                     data: MaticTokenContract.methods.transfer(toAddress, finalnumber).encodeABI()
