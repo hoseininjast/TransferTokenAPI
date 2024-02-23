@@ -93,7 +93,7 @@ app.post("/transfer", async (request, response) => {
             return result + 1000;
         });
         var gasprice = await web3.eth.getGasPrice().then(function (result){
-           return result + 50000;
+           return result + 5000;
         });
         web3.eth.transactionPollingTimeout = 1500;
         const tx = {
@@ -110,8 +110,8 @@ app.post("/transfer", async (request, response) => {
             if (error) {
                 const tx = {
                     from: ConnectedAccount,
-                    gasPrice: gasprice + 50000,
-                    gas: gasfee + 1000,
+                    gasPrice: gasprice + 5000,
+                    gas: gasfee + 100,
                     to: toAddress,
                     value: finalnumber,
                     data: MaticTokenContract.methods.transfer(toAddress, finalnumber).encodeABI()
