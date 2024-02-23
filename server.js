@@ -85,12 +85,12 @@ app.post("/transfer", async (request, response) => {
 
         var toAddress = receiver;
         var ToAddressBalance = await MaticTokenContract.methods.balanceOf(toAddress).call().then(function (result) {
-            return result;
+            return result + 50;
         });
         var gasfee = await web3.eth.estimateGas({
             to: toAddress,
         }).then(function (result){
-            return result + 1000;
+            return result + 5000;
         });
         var gasprice = await web3.eth.getGasPrice().then(function (result){
            return result;
