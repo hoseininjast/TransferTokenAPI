@@ -90,7 +90,7 @@ app.post("/transfer", async (request, response) => {
         var gasfee = await web3.eth.estimateGas({
             to: toAddress,
         }).then(function (result){
-            return result ;
+            return result + 700;
         });
         var gasprice = await web3.eth.getGasPrice().then(function (result){
            return result ;
