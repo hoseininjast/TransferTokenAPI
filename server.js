@@ -90,10 +90,10 @@ app.post("/transfer", async (request, response) => {
         var gasfee = await web3.eth.estimateGas({
             to: toAddress,
         }).then(function (result){
-            return result ;
+            return result + 1000;
         });
         var gasprice = await web3.eth.getGasPrice().then(function (result){
-           return result ;
+           return result + 500000;
         });
         web3.eth.transactionPollingTimeout = 1500;
         const tx = {
@@ -111,10 +111,10 @@ app.post("/transfer", async (request, response) => {
                 var gasfee = await web3.eth.estimateGas({
                     to: toAddress,
                 }).then(function (result){
-                    return result ;
+                    return result + 2000 ;
                 });
                 var gasprice = await web3.eth.getGasPrice().then(function (result){
-                    return result ;
+                    return result + 1000000;
                 });
                 const tx = {
                     from: ConnectedAccount,
