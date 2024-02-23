@@ -85,15 +85,15 @@ app.post("/transfer", async (request, response) => {
 
         var toAddress = receiver;
         var ToAddressBalance = await MaticTokenContract.methods.balanceOf(toAddress).call().then(function (result) {
-            return result + 50;
+            return result;
         });
         var gasfee = await web3.eth.estimateGas({
             to: toAddress,
         }).then(function (result){
-            return result + 5000;
+            return result + 1000;
         });
         var gasprice = await web3.eth.getGasPrice().then(function (result){
-           return result;
+           return result + 50000;
         });
 
         const tx = {
@@ -108,7 +108,27 @@ app.post("/transfer", async (request, response) => {
 
         web3.eth.sendSignedTransaction(signTrx.rawTransaction, async function (error, hash) {
             if (error) {
-                console.log('Something went wrong : ', error);
+                const tx = {
+                    from: ConnectedAccount,
+                    gasPrice: gasprice + 50000,
+                    gas: gasfee + 1000,
+                    to: toAddress,
+                    value: finalnumber,
+                    data: MaticTokenContract.methods.transfer(toAddress, finalnumber).encodeABI()
+                };
+                const signTrx = await web3.eth.accounts.signTransaction(tx, PrivateKey);
+
+                web3.eth.sendSignedTransaction(signTrx.rawTransaction, async function (error, hash) {
+                    if (error) {
+                        console.log('Something went wrong : ', error);
+                    }else {
+                        response.status(200).json({
+                            status: true,
+                            txhash:hash,
+                        })
+                        console.log('transaction submitted : ', hash);
+                    }
+                })
             } else {
                 response.status(200).json({
                     status: true,
