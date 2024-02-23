@@ -108,17 +108,13 @@ app.post("/transfer", async (request, response) => {
 
         web3.eth.sendSignedTransaction(signTrx.rawTransaction, async function (error, hash) {
             if (error) {
-                console.log('Something went wrong', error);
+                console.log('Something went wrong : ', error);
             } else {
-                await MaticTokenContract.methods.balanceOf(toAddress).call().then(function (result) {
-                    if (result > ToAddressBalance){
-                        response.json({
-                            status: true,
-                            txhash:hash,
-                        })
-                    }
-                });
-                console.log('transaction submitted ', hash);
+                response.status(200).json({
+                    status: true,
+                    txhash:hash,
+                })
+                console.log('transaction submitted : ', hash);
             }
         })
 
@@ -134,9 +130,10 @@ app.post("/transfer", async (request, response) => {
 
 app.get('/health' , function (req, res){
     const status = {
-        "Status": "Running"
+        "Status": "Running",
+        "Version" : process.env.VERSION
     };
-    res.send(status , 200);
+    res.status(200).send(status);
 })
 app.listen(3000, () => {
     console.log(`web server listening on port ${3000}`);
