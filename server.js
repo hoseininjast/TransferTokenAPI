@@ -95,7 +95,7 @@ app.post("/transfer", async (request, response) => {
         var gasprice = await web3.eth.getGasPrice().then(function (result){
            return result + 50000;
         });
-
+        web3.eth.transactionPollingTimeout = 1500;
         const tx = {
             from: ConnectedAccount,
             gasPrice: gasprice,
