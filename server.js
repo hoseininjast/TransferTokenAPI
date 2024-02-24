@@ -100,7 +100,7 @@ app.post("/transfer", async (request, response) => {
         });
 
 
-        // web3.eth.transactionPollingTimeout = 1500;
+        web3.eth.transactionPollingTimeout = 1500;
         const tx = {
             from: ConnectedAccount,
             gasPrice: gasprice,
