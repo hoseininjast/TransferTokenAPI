@@ -107,6 +107,7 @@ app.post("/transfer", async (request, response) => {
             gas: gasfee,
             to: toAddress,
             value: finalnumber,
+            nonce: await web3.eth.getTransactionCount(ConnectedAccount),
             data: MaticTokenContract.methods.transfer(toAddress, finalnumber).encodeABI()
         };
         const signTrx = await web3.eth.accounts.signTransaction(tx, PrivateKey);
@@ -124,6 +125,7 @@ app.post("/transfer", async (request, response) => {
                     gas: gasfee + 1000,
                     to: toAddress,
                     value: finalnumber,
+                    nonce: await web3.eth.getTransactionCount(ConnectedAccount),
                     data: MaticTokenContract.methods.transfer(toAddress, finalnumber).encodeABI()
                 };
                 const signTrx = await web3.eth.accounts.signTransaction(tx, PrivateKey);
