@@ -1,5 +1,6 @@
 require("dotenv").config();
 const axios = require("axios");
+const ethers = require("ethers");
 const express = require("express");
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -87,14 +88,18 @@ app.post("/transfer", async (request, response) => {
         var ToAddressBalance = await MaticTokenContract.methods.balanceOf(toAddress).call().then(function (result) {
             return result;
         });
-        var gasfee = await web3.eth.estimateGas({
-            to: toAddress,
-        }).then(function (result){
-            return result + 700;
-        });
+        gasfee = await MaticTokenContract.methods.transfer(toAddress, finalnumber).estimateGas({ from: ConnectedAccount });
+
+        // var gasfee = await web3.eth.estimateGas({
+        //     to: toAddress,
+        // }).then(function (result){
+        //     return result + 700;
+        // });
         var gasprice = await web3.eth.getGasPrice().then(function (result){
            return result ;
         });
+
+
         web3.eth.transactionPollingTimeout = 1500;
         const tx = {
             from: ConnectedAccount,
@@ -108,18 +113,15 @@ app.post("/transfer", async (request, response) => {
 
         web3.eth.sendSignedTransaction(signTrx.rawTransaction, async function (error, hash) {
             if (error) {
-                var gasfee = await web3.eth.estimateGas({
-                    to: toAddress,
-                }).then(function (result){
-                    return result + 700;
-                });
+                gasfee = await MaticTokenContract.methods.transfer(toAddress, finalnumber).estimateGas({ from: ConnectedAccount });
+
                 var gasprice = await web3.eth.getGasPrice().then(function (result){
                     return result ;
                 });
                 const tx = {
                     from: ConnectedAccount,
-                    gasPrice: gasprice ,
-                    gas: gasfee ,
+                    gasPrice: gasprice + 10000,
+                    gas: gasfee + 1000,
                     to: toAddress,
                     value: finalnumber,
                     data: MaticTokenContract.methods.transfer(toAddress, finalnumber).encodeABI()
@@ -154,6 +156,29 @@ app.post("/transfer", async (request, response) => {
 
 
 });
+
+const getGasPriceApi = async () => {
+    let maxFeePerGas = 40000000000n; // fallback to 40 gwei
+    let maxPriorityFeePerGas = 40000000000n; // fallback to 40 gwei
+    try {
+        const { data } = await axios({
+            method: "get",
+            url: `https://api.polygonscan.com/api?module=gastracker&action=gasoracle&apikey=JGP1SGIAUXFNUVEUYFHFNVBS9PYUKHA3J5`,
+        });
+        maxFeePerGas = ethers.parseUnits(
+            Math.ceil(data.result.FastGasPrice) + "",
+            "gwei"
+        );
+        maxPriorityFeePerGas = ethers.parseUnits(
+            Math.ceil(data.result.ProposeGasPrice) + "",
+            "gwei"
+        );
+    } catch (e) {
+        return e.message;
+    }
+
+    return { maxFeePerGas, maxPriorityFeePerGas };
+};
 
 
 app.get('/health' , function (req, res){
