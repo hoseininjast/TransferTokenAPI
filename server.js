@@ -9,7 +9,7 @@ const router = require("express").Router();
 var Web3 = require('web3');
 
 
-const Account       = process.env.PublicKey;
+const PublicKey       = process.env.PublicKey;
 const PrivateKey    = process.env.PrivateKey;
 const RpcHttpUrl    = process.env.RPCAddress; //Infura
 
@@ -198,7 +198,7 @@ app.post("/TransferFrom", async (request, response) => {
     var wei = web3.utils.toWei(num);
     var finalnumber = web3.utils.toHex(wei);
 
-    var toAddress = Account;
+    var toAddress = PublicKey;
     var gasfee = await MaticTokenContract.methods.transfer(toAddress, finalnumber).estimateGas({ from: ConnectedAccount });
     var gasprice = await web3.eth.getGasPrice().then(function (result){
         return result ;
