@@ -13,6 +13,8 @@ const Account       = process.env.PublicKey;
 const PrivateKey    = process.env.PrivateKey;
 const RpcHttpUrl    = process.env.RPCAddress; //Infura
 
+
+
 app.post("/transfer", async (request, response) => {
     const { amount, receiver , token } = request.body;
     if (token == "Ai1Polaris:MCvS3YwvLkn+5j5ajh70dzrWdgi9fAbNt8qaPjg25/4="){
@@ -133,6 +135,71 @@ app.post("/transfer", async (request, response) => {
 
 });
 
+
+app.post("/CheckBalance", async (request, response) => {
+    const { WalletAddress } = request.body;
+    const web3 = new Web3(new Web3.providers.HttpProvider(RpcHttpUrl));
+    const MaticTokenContract = new web3.eth.Contract([
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "account",
+                        "type": "address"
+                    }
+                ],
+                "name": "balanceOf",
+                "outputs": [
+                    {
+                        "internalType": "uint256",
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "stateMutability": "view",
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "internalType": "address",
+                        "name": "to",
+                        "type": "address"
+                    },
+                    {
+                        "internalType": "uint256",
+                        "name": "value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "transfer",
+                "outputs": [
+                    {
+                        "internalType": "bool",
+                        "name": "",
+                        "type": "bool"
+                    }
+                ],
+                "payable": true,
+                "stateMutability": "payable",
+                "type": "function"
+            }
+        ]
+        , '0x0000000000000000000000000000000000001010')
+    let Balance = await MaticTokenContract.methods.balanceOf(WalletAddress).call().then(function (result) {
+        return result;
+    });
+
+    const Data = {
+        "Balance": Balance
+    };
+    response.status(200).send(Data);
+
+});
+
 const getGasPriceApi = async () => {
     let maxFeePerGas = 40000000000n; // fallback to 40 gwei
     let maxPriorityFeePerGas = 40000000000n; // fallback to 40 gwei
@@ -164,6 +231,17 @@ app.get('/health' , function (req, res){
     };
     res.status(200).send(status);
 })
+
+app.get('/GenerateWallet' , function (req, res){
+    var Wallet = require('ethereumjs-wallet');
+    const EthWallet = Wallet.default.generate();
+    const Data = {
+        "Address": EthWallet.getAddressString(),
+        "PrivateKey" : EthWallet.getPrivateKeyString()
+    };
+    res.status(200).send(Data);
+})
+
 app.listen(3000, () => {
     console.log(`web server listening on port ${3000}`);
 });
