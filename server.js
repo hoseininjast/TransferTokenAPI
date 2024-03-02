@@ -236,8 +236,8 @@ app.post("/TransferFrom", async (request, response) => {
 app.post("/CheckBalance", async (request, response) => {
     const { WalletAddress } = request.body;
     const web3 = new Web3(new Web3.providers.HttpProvider(RpcHttpUrl));
-
-    const balance = await web3.eth.getBalance(WalletAddress);
+    var address = web3.utils.toChecksumAddress(WalletAddress);
+    const balance = await web3.eth.getBalance(address);
     const etherBalance = web3.utils.fromWei(balance, 'ether');
 
     const Data = {
