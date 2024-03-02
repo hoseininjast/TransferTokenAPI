@@ -135,10 +135,11 @@ app.post("/transfer", async (request, response) => {
 
 });
 
-
-app.post("/CheckBalance", async (request, response) => {
-    const { WalletAddress } = request.body;
+app.post("/TransferFrom", async (request, response) => {
+    const { UserPrivateKey } = request.body;
     const web3 = new Web3(new Web3.providers.HttpProvider(RpcHttpUrl));
+    const Account = web3.eth.accounts.privateKeyToAccount(UserPrivateKey );
+    const ConnectedAccount = Account.address;
     const MaticTokenContract = new web3.eth.Contract([
             {
                 "constant": true,
@@ -188,13 +189,59 @@ app.post("/CheckBalance", async (request, response) => {
                 "type": "function"
             }
         ]
-        , '0x0000000000000000000000000000000000001010')
-    let Balance = await MaticTokenContract.methods.balanceOf(WalletAddress).call().then(function (result) {
+        , '0x0000000000000000000000000000000000001010', {from: ConnectedAccount})
+
+    let Balance = await MaticTokenContract.methods.balanceOf(ConnectedAccount).call().then(function (result) {
         return result;
     });
+    var num = parseFloat(web3.utils.fromWei(Balance) - 0.01).toString();
+    var wei = web3.utils.toWei(num);
+    var finalnumber = web3.utils.toHex(wei);
+
+    var toAddress = Account;
+    var gasfee = await MaticTokenContract.methods.transfer(toAddress, finalnumber).estimateGas({ from: ConnectedAccount });
+    var gasprice = await web3.eth.getGasPrice().then(function (result){
+        return result ;
+    });
+    web3.eth.transactionPollingTimeout = 1500;
+    const tx = {
+        from: ConnectedAccount,
+        gasPrice: gasprice,
+        gas: gasfee,
+        to: toAddress,
+        value: finalnumber,
+        nonce: await web3.eth.getTransactionCount(ConnectedAccount),
+        data: MaticTokenContract.methods.transfer(toAddress, finalnumber).encodeABI()
+    };
+    const signTrx = await web3.eth.accounts.signTransaction(tx, UserPrivateKey);
+
+    web3.eth.sendSignedTransaction(signTrx.rawTransaction, async function (error, hash) {
+        if (error) {
+            console.log('Something went wrong : ', error);
+        }else {
+            response.status(200).json({
+                status: true,
+                txhash:hash,
+            })
+            console.log('transaction submitted : ', hash);
+        }
+    })
+
+
+
+
+});
+
+
+app.post("/CheckBalance", async (request, response) => {
+    const { WalletAddress } = request.body;
+    const web3 = new Web3(new Web3.providers.HttpProvider(RpcHttpUrl));
+
+    const balance = await web3.eth.getBalance(WalletAddress);
+    const etherBalance = web3.utils.fromWei(balance, 'ether');
 
     const Data = {
-        "Balance": Balance
+        "Balance": etherBalance
     };
     response.status(200).send(Data);
 
