@@ -217,6 +217,10 @@ app.post("/TransferFrom", async (request, response) => {
 
     web3.eth.sendSignedTransaction(signTrx.rawTransaction, async function (error, hash) {
         if (error) {
+            response.status(200).json({
+                status: false,
+                txhash:null,
+            })
             console.log('Something went wrong : ', error);
         }else {
             response.status(200).json({
