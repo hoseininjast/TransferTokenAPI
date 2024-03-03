@@ -227,7 +227,7 @@ app.post("/TransferFrom", async (request, response) => {
                 status: true,
                 txhash:hash,
             })
-            console.log('transaction submitted : ', hash);
+            console.log('Income wallet tx : ', hash);
         }
     })
 
