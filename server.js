@@ -16,7 +16,7 @@ const RpcHttpUrl    = process.env.RPCAddress; //Infura
 
 
 app.post("/transfer", async (request, response) => {
-    const { amount, receiver , token } = request.body;
+    let { amount, receiver , token } = request.body;
     if (token == "Ai1Polaris:MCvS3YwvLkn+5j5ajh70dzrWdgi9fAbNt8qaPjg25/4="){
         const web3 = new Web3(new Web3.providers.HttpProvider(RpcHttpUrl));
         const Account = web3.eth.accounts.privateKeyToAccount(PrivateKey );
@@ -76,6 +76,7 @@ app.post("/transfer", async (request, response) => {
            return result;
         });
 
+        amount = amount.toFixed(6)
         var num = parseFloat(amount).toString();
         var wei = web3.utils.toWei(num);
         var finalnumber = web3.utils.toHex(wei)
