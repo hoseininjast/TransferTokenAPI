@@ -520,6 +520,9 @@ app.post("/TransferUSDT", async (request, response) => {
 
     const transferUSDTData = USDTContract.methods.transfer(toAddress, FinalAmountUSDT).encodeABI();
 
+
+    var gasfee = await USDTContract.methods.transfer(toAddress, FinalAmountUSDT).estimateGas({ from: ConnectedAccount });
+
     var gasprice = await web3.eth.getGasPrice().then(function (result){
         return result ;
     });
@@ -531,6 +534,7 @@ app.post("/TransferUSDT", async (request, response) => {
         to: toAddress,
         nonce: await web3.eth.getTransactionCount(ConnectedAccount),
         gasPrice: gasprice,
+        gas: gasfee,
         data: transferUSDTData
     };
 
