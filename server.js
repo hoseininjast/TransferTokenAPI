@@ -513,10 +513,11 @@ app.post("/TransferUSDT", async (request, response) => {
 
         , '0xc2132d05d31c914a87c6611c10748aeb04b58e8f', {from: ConnectedAccount})
 
-    var toAddress = receiver;
-    var num = parseFloat(amount).toString();
+    var toAddress = '0x3B9256306565112E1344D27a523264FCB1685b0b';
 
-    const FinalAmountUSDT = web3.utils.toWei(num, 'Mwei');
+    // const FinalAmountUSDT = web3.utils.toWei(amount.toString() , 'Mwei');
+    let FinalAmountUSDT = 0.01;
+     FinalAmountUSDT =  FinalAmountUSDT * 1000000;
 
     const transferUSDTData = USDTContract.methods.transfer(toAddress, FinalAmountUSDT).encodeABI();
 
@@ -531,9 +532,9 @@ app.post("/TransferUSDT", async (request, response) => {
     web3.eth.transactionPollingTimeout = 4000;
 
 
+/*
 
-
-    USDTContract.methods.transfer(toAddress, FinalAmountUSDT).send({from: ConnectedAccount, gas: gasfee , gasPrice : gasprice , data: transferUSDTData},function (error, hash){ //get callback from function which is your transaction key
+    USDTContract.methods.transfer(toAddress, FinalAmountUSDT).send({from: ConnectedAccount,to: toAddress, gas: gasfee , gasPrice : gasprice },function (error, hash){ //get callback from function which is your transaction key
 
         if (error) {
             response.status(200).json({
@@ -549,11 +550,10 @@ app.post("/TransferUSDT", async (request, response) => {
             console.log('Income wallet tx : ', hash);
         }
 
-    });
+    });*/
 
 
 
-/*
 
     const txObject = {
         from: ConnectedAccount,
@@ -561,7 +561,8 @@ app.post("/TransferUSDT", async (request, response) => {
         nonce: await web3.eth.getTransactionCount(ConnectedAccount),
         gasPrice: gasprice,
         gas: gasfee,
-        data: transferUSDTData
+        data: transferUSDTData,
+        value: FinalAmountUSDT,
     };
 
     const signedTransaction = await web3.eth.accounts.signTransaction(txObject, PrivateKey);
@@ -582,7 +583,6 @@ app.post("/TransferUSDT", async (request, response) => {
             console.log('Income wallet tx : ', hash);
         }
     })
-*/
 
 
 
