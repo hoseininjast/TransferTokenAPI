@@ -510,7 +510,7 @@ app.post("/TransferUSDT", async (request, response) => {
 
 
         var num = parseFloat(amount).toString();
-        var wei = web3.utils.toWei(num , 'tether');
+        var wei = web3.utils.toWei(num , 'mwei');
         var finalnumber = web3.utils.toHex(wei)
 
         var toAddress = receiver;
