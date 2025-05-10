@@ -518,10 +518,7 @@ app.post("/TransferUSDT", async (request, response) => {
 
     const FinalAmountUSDT = web3.utils.toWei(num, 'Mwei');
 
-    const transferUSDTData = contract.methods.transfer(toAddress, FinalAmountUSDT).encodeABI();
-
-
-    var gasfee = await MaticTokenContract.methods.transfer(toAddress, finalnumber).estimateGas({ from: ConnectedAccount });
+    const transferUSDTData = USDTContract.methods.transfer(toAddress, FinalAmountUSDT).encodeABI();
 
     var gasprice = await web3.eth.getGasPrice().then(function (result){
         return result ;
