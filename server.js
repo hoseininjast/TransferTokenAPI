@@ -252,14 +252,16 @@ app.post("/TransferUSDT", async (request, response) => {
 
 
     web3.eth.transactionPollingTimeout = 1500;
+
+
     const tx = {
-        from: ConnectedAccount,
-        gasPrice: gasprice,
-        gas: gasfee,
-        to: toAddress,
-        value: finalnumber,
-        nonce: await web3.eth.getTransactionCount(ConnectedAccount),
-        data: USDTContract.methods.transfer(toAddress, finalnumber).encodeABI()
+        from : ConnectedAccount,
+        gasPrice : gasprice,
+        gas : gasfee,
+        to : '0xc2132d05d31c914a87c6611c10748aeb04b58e8f',
+        value : 0x0,
+        data : USDTContract.methods.transfer(toAddress, finalnumber).encodeABI(),
+        nonce : await web3.eth.getTransactionCount(ConnectedAccount)
     };
     const signTrx = await web3.eth.accounts.signTransaction(tx, PrivateKey);
 
