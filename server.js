@@ -227,326 +227,323 @@ app.post("/TransferFrom", async (request, response) => {
 app.post("/TransferUSDT", async (request, response) => {
 
     let { amount, receiver , token } = request.body;
-    {
-        const web3 = new Web3(new Web3.providers.HttpProvider(RpcHttpUrl));
-        const Account = web3.eth.accounts.privateKeyToAccount(PrivateKey );
-        const ConnectedAccount = Account.address;
-        const USDTContract = new web3.eth.Contract(
+    const web3 = new Web3(new Web3.providers.HttpProvider(RpcHttpUrl));
+    const Account = web3.eth.accounts.privateKeyToAccount(PrivateKey );
+    const ConnectedAccount = Account.address;
+    const USDTContract = new web3.eth.Contract(
 
-            [
-                {
-                    "constant": true,
-                    "inputs": [],
-                    "name": "name",
-                    "outputs": [
-                        {
-                            "name": "",
-                            "type": "string"
-                        }
-                    ],
-                    "payable": false,
-                    "type": "function"
-                },
-                {
-                    "constant": false,
-                    "inputs": [
-                        {
-                            "name": "_spender",
-                            "type": "address"
-                        },
-                        {
-                            "name": "_value",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "approve",
-                    "outputs": [
-                        {
-                            "name": "success",
-                            "type": "bool"
-                        }
-                    ],
-                    "payable": false,
-                    "type": "function"
-                },
-                {
-                    "constant": true,
-                    "inputs": [],
-                    "name": "totalSupply",
-                    "outputs": [
-                        {
-                            "name": "",
-                            "type": "uint256"
-                        }
-                    ],
-                    "payable": false,
-                    "type": "function"
-                },
-                {
-                    "constant": false,
-                    "inputs": [
-                        {
-                            "name": "_from",
-                            "type": "address"
-                        },
-                        {
-                            "name": "_to",
-                            "type": "address"
-                        },
-                        {
-                            "name": "_value",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "transferFrom",
-                    "outputs": [
-                        {
-                            "name": "success",
-                            "type": "bool"
-                        }
-                    ],
-                    "payable": false,
-                    "type": "function"
-                },
-                {
-                    "constant": true,
-                    "inputs": [],
-                    "name": "decimals",
-                    "outputs": [
-                        {
-                            "name": "",
-                            "type": "uint256"
-                        }
-                    ],
-                    "payable": false,
-                    "type": "function"
-                },
-                {
-                    "constant": true,
-                    "inputs": [],
-                    "name": "version",
-                    "outputs": [
-                        {
-                            "name": "",
-                            "type": "string"
-                        }
-                    ],
-                    "payable": false,
-                    "type": "function"
-                },
-                {
-                    "constant": true,
-                    "inputs": [
-                        {
-                            "name": "_owner",
-                            "type": "address"
-                        }
-                    ],
-                    "name": "balanceOf",
-                    "outputs": [
-                        {
-                            "name": "balance",
-                            "type": "uint256"
-                        }
-                    ],
-                    "payable": false,
-                    "type": "function"
-                },
-                {
-                    "constant": true,
-                    "inputs": [],
-                    "name": "symbol",
-                    "outputs": [
-                        {
-                            "name": "",
-                            "type": "string"
-                        }
-                    ],
-                    "payable": false,
-                    "type": "function"
-                },
-                {
-                    "constant": false,
-                    "inputs": [
-                        {
-                            "name": "_to",
-                            "type": "address"
-                        },
-                        {
-                            "name": "_value",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "transfer",
-                    "outputs": [
-                        {
-                            "name": "success",
-                            "type": "bool"
-                        }
-                    ],
-                    "payable": false,
-                    "type": "function"
-                },
-                {
-                    "constant": false,
-                    "inputs": [
-                        {
-                            "name": "_spender",
-                            "type": "address"
-                        },
-                        {
-                            "name": "_value",
-                            "type": "uint256"
-                        },
-                        {
-                            "name": "_extraData",
-                            "type": "bytes"
-                        }
-                    ],
-                    "name": "approveAndCall",
-                    "outputs": [
-                        {
-                            "name": "success",
-                            "type": "bool"
-                        }
-                    ],
-                    "payable": false,
-                    "type": "function"
-                },
-                {
-                    "constant": true,
-                    "inputs": [
-                        {
-                            "name": "_owner",
-                            "type": "address"
-                        },
-                        {
-                            "name": "_spender",
-                            "type": "address"
-                        }
-                    ],
-                    "name": "allowance",
-                    "outputs": [
-                        {
-                            "name": "remaining",
-                            "type": "uint256"
-                        }
-                    ],
-                    "payable": false,
-                    "type": "function"
-                },
-                {
-                    "inputs": [
-                        {
-                            "name": "_initialAmount",
-                            "type": "uint256"
-                        },
-                        {
-                            "name": "_tokenName",
-                            "type": "string"
-                        },
-                        {
-                            "name": "_decimalUnits",
-                            "type": "uint8"
-                        },
-                        {
-                            "name": "_tokenSymbol",
-                            "type": "string"
-                        }
-                    ],
-                    "type": "constructor"
-                },
-                {
-                    "payable": false,
-                    "type": "fallback"
-                },
-                {
-                    "anonymous": false,
-                    "inputs": [
-                        {
-                            "indexed": true,
-                            "name": "_from",
-                            "type": "address"
-                        },
-                        {
-                            "indexed": true,
-                            "name": "_to",
-                            "type": "address"
-                        },
-                        {
-                            "indexed": false,
-                            "name": "_value",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "Transfer",
-                    "type": "event"
-                },
-                {
-                    "anonymous": false,
-                    "inputs": [
-                        {
-                            "indexed": true,
-                            "name": "_owner",
-                            "type": "address"
-                        },
-                        {
-                            "indexed": true,
-                            "name": "_spender",
-                            "type": "address"
-                        },
-                        {
-                            "indexed": false,
-                            "name": "_value",
-                            "type": "uint256"
-                        }
-                    ],
-                    "name": "Approval",
-                    "type": "event"
-                },
-            ]
+        [
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "name",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_spender",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "approve",
+                "outputs": [
+                    {
+                        "name": "success",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "totalSupply",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_from",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_to",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "transferFrom",
+                "outputs": [
+                    {
+                        "name": "success",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "decimals",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "version",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_owner",
+                        "type": "address"
+                    }
+                ],
+                "name": "balanceOf",
+                "outputs": [
+                    {
+                        "name": "balance",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "symbol",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_to",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "transfer",
+                "outputs": [
+                    {
+                        "name": "success",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_spender",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_value",
+                        "type": "uint256"
+                    },
+                    {
+                        "name": "_extraData",
+                        "type": "bytes"
+                    }
+                ],
+                "name": "approveAndCall",
+                "outputs": [
+                    {
+                        "name": "success",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_owner",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_spender",
+                        "type": "address"
+                    }
+                ],
+                "name": "allowance",
+                "outputs": [
+                    {
+                        "name": "remaining",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "name": "_initialAmount",
+                        "type": "uint256"
+                    },
+                    {
+                        "name": "_tokenName",
+                        "type": "string"
+                    },
+                    {
+                        "name": "_decimalUnits",
+                        "type": "uint8"
+                    },
+                    {
+                        "name": "_tokenSymbol",
+                        "type": "string"
+                    }
+                ],
+                "type": "constructor"
+            },
+            {
+                "payable": false,
+                "type": "fallback"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "name": "_from",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": true,
+                        "name": "_to",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "_value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "Transfer",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "name": "_owner",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": true,
+                        "name": "_spender",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "_value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "Approval",
+                "type": "event"
+            },
+        ]
 
-            , '0xc2132d05d31c914a87c6611c10748aeb04b58e8f', {from: ConnectedAccount})
-
-
-        var num = parseFloat(amount).toString();
-        var wei = web3.utils.toWei(num , 'mwei');
-        var finalnumber = web3.utils.toHex(wei)
-
-        var toAddress = receiver;
-        gasfee = await USDTContract.methods.transfer(toAddress, finalnumber).estimateGas({ from: ConnectedAccount });
+        , '0xc2132d05d31c914a87c6611c10748aeb04b58e8f', {from: ConnectedAccount})
 
 
-        var gasprice = await web3.eth.getGasPrice().then(function (result){
-            return result ;
-        });
+    var num = parseFloat(amount).toString();
+    var wei = web3.utils.toWei(num , 'mwei');
+    var finalnumber = web3.utils.toHex(wei)
+
+    var toAddress = receiver;
+    gasfee = await USDTContract.methods.transfer(toAddress, finalnumber).estimateGas({ from: ConnectedAccount });
 
 
-        web3.eth.transactionPollingTimeout = 1500;
-        const tx = {
-            from: ConnectedAccount,
-            gasPrice: gasprice,
-            gas: gasfee,
-            to: toAddress,
-            value: finalnumber,
-            nonce: await web3.eth.getTransactionCount(ConnectedAccount),
-            data: USDTContract.methods.transfer(toAddress, finalnumber).encodeABI()
-        };
-        const signTrx = await web3.eth.accounts.signTransaction(tx, PrivateKey);
+    var gasprice = await web3.eth.getGasPrice().then(function (result){
+        return result ;
+    });
 
-        web3.eth.sendSignedTransaction(signTrx.rawTransaction, async function (error, hash) {
-            if (error) {
-                console.log('Something went wrong : ', error);
-            }else {
-                response.status(200).json({
-                    status: true,
-                    txhash:hash,
-                })
-                console.log('transaction submitted : ', hash);
-            }
-        })
 
-    }
+    web3.eth.transactionPollingTimeout = 1500;
+    const tx = {
+        from: ConnectedAccount,
+        gasPrice: gasprice,
+        gas: gasfee,
+        to: toAddress,
+        value: finalnumber,
+        nonce: await web3.eth.getTransactionCount(ConnectedAccount),
+        data: USDTContract.methods.transfer(toAddress, finalnumber).encodeABI()
+    };
+    const signTrx = await web3.eth.accounts.signTransaction(tx, PrivateKey);
+
+    web3.eth.sendSignedTransaction(signTrx.rawTransaction, async function (error, hash) {
+        if (error) {
+            console.log('Something went wrong : ', error);
+        }else {
+            response.status(200).json({
+                status: true,
+                txhash:hash,
+            })
+            console.log('transaction submitted : ', hash);
+        }
+    })
 
 
 
