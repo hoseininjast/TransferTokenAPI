@@ -231,6 +231,336 @@ app.post("/TransferFrom", async (request, response) => {
 
 });
 
+app.post("/TransferUSDT", async (request, response) => {
+    let { amount, receiver } = request.body;
+    const web3 = new Web3(new Web3.providers.HttpProvider(RpcHttpUrl));
+    const Account = web3.eth.accounts.privateKeyToAccount(PrivateKey );
+    const ConnectedAccount = Account.address;
+    const USDTContract = new web3.eth.Contract(
+
+        [
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "name",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_spender",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "approve",
+                "outputs": [
+                    {
+                        "name": "success",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "totalSupply",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_from",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_to",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "transferFrom",
+                "outputs": [
+                    {
+                        "name": "success",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "decimals",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "version",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_owner",
+                        "type": "address"
+                    }
+                ],
+                "name": "balanceOf",
+                "outputs": [
+                    {
+                        "name": "balance",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [],
+                "name": "symbol",
+                "outputs": [
+                    {
+                        "name": "",
+                        "type": "string"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_to",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "transfer",
+                "outputs": [
+                    {
+                        "name": "success",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_spender",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_value",
+                        "type": "uint256"
+                    },
+                    {
+                        "name": "_extraData",
+                        "type": "bytes"
+                    }
+                ],
+                "name": "approveAndCall",
+                "outputs": [
+                    {
+                        "name": "success",
+                        "type": "bool"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "constant": true,
+                "inputs": [
+                    {
+                        "name": "_owner",
+                        "type": "address"
+                    },
+                    {
+                        "name": "_spender",
+                        "type": "address"
+                    }
+                ],
+                "name": "allowance",
+                "outputs": [
+                    {
+                        "name": "remaining",
+                        "type": "uint256"
+                    }
+                ],
+                "payable": false,
+                "type": "function"
+            },
+            {
+                "inputs": [
+                    {
+                        "name": "_initialAmount",
+                        "type": "uint256"
+                    },
+                    {
+                        "name": "_tokenName",
+                        "type": "string"
+                    },
+                    {
+                        "name": "_decimalUnits",
+                        "type": "uint8"
+                    },
+                    {
+                        "name": "_tokenSymbol",
+                        "type": "string"
+                    }
+                ],
+                "type": "constructor"
+            },
+            {
+                "payable": false,
+                "type": "fallback"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "name": "_from",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": true,
+                        "name": "_to",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "_value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "Transfer",
+                "type": "event"
+            },
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "name": "_owner",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": true,
+                        "name": "_spender",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": false,
+                        "name": "_value",
+                        "type": "uint256"
+                    }
+                ],
+                "name": "Approval",
+                "type": "event"
+            },
+        ]
+
+        , '0xc2132d05d31c914a87c6611c10748aeb04b58e8f', {from: ConnectedAccount})
+
+    var toAddress = receiver;
+    var num = parseFloat(amount).toString();
+
+    const FinalAmountUSDT = web3.utils.toWei(num, 'Mwei');
+
+    const transferUSDTData = contract.methods.transfer(toAddress, FinalAmountUSDT).encodeABI();
+
+
+    var gasfee = await MaticTokenContract.methods.transfer(toAddress, finalnumber).estimateGas({ from: ConnectedAccount });
+
+    var gasprice = await web3.eth.getGasPrice().then(function (result){
+        return result ;
+    });
+
+    web3.eth.transactionPollingTimeout = 4000;
+
+    const txObject = {
+        from: ConnectedAccount,
+        to: toAddress,
+        nonce: await web3.eth.getTransactionCount(ConnectedAccount),
+        gasPrice: gasprice,
+        data: transferUSDTData
+    };
+
+    const signedTransaction = await web3.eth.accounts.signTransaction(txObject, PrivateKey);
+
+
+    web3.eth.sendSignedTransaction(signedTransaction.rawTransaction, async function (error, hash) {
+        if (error) {
+            response.status(200).json({
+                status: false,
+                txhash:null,
+            })
+            console.log('Something went wrong : ', error);
+        }else {
+            response.status(200).json({
+                status: true,
+                txhash:hash,
+            })
+            console.log('Income wallet tx : ', hash);
+        }
+    })
+
+
+
+
+});
+
 
 app.post("/CheckBalance", async (request, response) => {
     const { WalletAddress } = request.body;
