@@ -521,6 +521,7 @@ app.post("/TransferUSDT", async (request, response) => {
     const transferUSDTData = USDTContract.methods.transfer(toAddress, FinalAmountUSDT).encodeABI();
 
 
+
     var gasfee = await USDTContract.methods.transfer(toAddress, FinalAmountUSDT).estimateGas({ from: ConnectedAccount });
 
     var gasprice = await web3.eth.getGasPrice().then(function (result){
@@ -528,6 +529,31 @@ app.post("/TransferUSDT", async (request, response) => {
     });
 
     web3.eth.transactionPollingTimeout = 4000;
+
+
+
+
+    USDTContract.methods.transfer(toAddress, FinalAmountUSDT).send({from: ConnectedAccount, gas: gasfee , gasPrice : gasprice , data: transferUSDTData},function (error, hash){ //get callback from function which is your transaction key
+
+        if (error) {
+            response.status(200).json({
+                status: false,
+                txhash:null,
+            })
+            console.log('Something went wrong : ', error);
+        }else {
+            response.status(200).json({
+                status: true,
+                txhash:hash,
+            })
+            console.log('Income wallet tx : ', hash);
+        }
+
+    });
+
+
+
+/*
 
     const txObject = {
         from: ConnectedAccount,
@@ -556,6 +582,7 @@ app.post("/TransferUSDT", async (request, response) => {
             console.log('Income wallet tx : ', hash);
         }
     })
+*/
 
 
 
